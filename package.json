@@ -1,0 +1,45 @@
+{
+  "name": "the-serializer",
+  "version": "1.0.0",
+  "description": "a certain specific JSON stringifier that supports `BigInt` and `Symbol` and `undefined`, and can possibly stringify your classes and revive them after parsing.",
+  "main": "index",
+  "type": "module",
+  "scripts": {
+    "test": "vitest run",
+    "lint": "eslint .",
+    "lint:fix": "eslint . --fix"
+  },
+  "private": false,
+  "keywords": [
+    "serializer",
+    "serialize",
+    "deserializer",
+    "the"
+  ],
+  "author": {
+    "name": "jd1378"
+  },
+  "license": "MIT",
+  "devDependencies": {
+    "@eslint/js": "^9.9.1",
+    "@types/eslint__js": "^8.42.3",
+    "@types/lodash-es": "^4.17.12",
+    "@types/node": "^22.5.1",
+    "eslint": "^9.9.1",
+    "eslint-config-prettier": "^9.1.0",
+    "eslint-plugin-prettier": "^5.2.1",
+    "eslint-plugin-vitest": "^0.5.4",
+    "lodash-es": "^4.17.21",
+    "prettier": "^3.3.3",
+    "typescript": "^5.5.4",
+    "typescript-eslint": "^8.2.0",
+    "vite-tsconfig-paths": "^5.0.1",
+    "vitest": "^2.0.5"
+  },
+  "engines": {
+    "node": ">= 16.0.0"
+  },
+  "dependencies": {
+    "flatted": "^3.3.1"
+  }
+}
