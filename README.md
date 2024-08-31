@@ -9,24 +9,27 @@ pnpm install the-serializer
 ```
 
 ```ts
-import {serialize, deserialize} from "the-serializer";
+import {serialize, deserialize, flattedParse, flattedStringify} from "the-serializer";
 
 deserialize(serialize(BigInt(10))) === BigInt(10)
 
 // more advanced
+
+// to use class serialization and revival you need to implement `toJSON` and `fromJSON`
+// in your class, and pass your class to serialize and deserialize
 
 class User {
   constructor(
     public name: string,
     public age: number,
   ) {}
-  // important for serialization
+
   toJSON() {
-    return stringify([this.name, this.age]);
+    return flattedStringify([this.name, this.age]);
   }
-  // important for serialization
+
   static fromJSON(json: string) {
-    const [name, age] = parse(json);
+    const [name, age] = flattedParse(json);
     // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
     return new User(name, age);
   }

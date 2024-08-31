@@ -2,6 +2,8 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import {parse, stringify} from 'flatted';
 
+export {parse as flattedParse, stringify as flattedStringify};
+
 export type JSONSerializable = {toJSON: () => string};
 export interface JSONSerializableClass {
   new (...any: any[]): JSONSerializable;
