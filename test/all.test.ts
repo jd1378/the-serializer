@@ -37,7 +37,7 @@ describe('serialize', () => {
   });
 
   it('can serialize BigInt', () => {
-    expect(serialize(BigInt(1234))).toBe('["1234n"]');
+    expect(serialize(BigInt(1234))).toBe('[{"$$_n":"1"},"1234"]');
   });
 
   it('can serialize class in a special way when provided', () => {
@@ -107,8 +107,8 @@ describe('deserialize', () => {
   });
 
   it('can deserialize BigInt', () => {
-    expect(deserialize('["1234n"]')).toEqual(BigInt(1234));
-    expect(deserialize('["1234n"]')).not.toEqual(BigInt(4321));
+    expect(deserialize('[{"$$_n":"1"},"1234"]')).toEqual(BigInt(1234));
+    expect(deserialize('[{"$$_n":"1"},"1234"]')).not.toEqual(BigInt(4321));
   });
 
   it('can deserialize class in a special way when provided', () => {

@@ -29,7 +29,7 @@ function customReplacer(
     return {$$_u: 1};
   }
   if (typeof value === 'bigint') {
-    return value.toString() + 'n';
+    return {$$_n: value.toString()};
   }
   if (typeof value === 'symbol') {
     return {$$_s: value.toString().slice(7, -1)};
@@ -50,10 +50,10 @@ function customReplacer(
 
 function customReviver(this: ClassRecord | undefined, _key: string, value: any): unknown {
   if (value === null) return null;
-  if (typeof value === 'string' && /^\d+n$/.test(value)) {
-    return BigInt(value.slice(0, -1));
-  }
   if (typeof value === 'object') {
+    if (typeof value.$$_n === 'string') {
+      return BigInt(value.$$_n as string);
+    }
     if (typeof value.$$_s === 'string') {
       return Symbol.for(value.$$_s as string);
     }
