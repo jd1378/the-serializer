@@ -6,7 +6,12 @@ import vitest from 'eslint-plugin-vitest';
 export default tseslint.config(
   eslint.configs.recommended,
   {
-    languageOptions: {parserOptions: {project: true, tsconfigRootDir: import.meta.dirname}},
+    languageOptions: {
+      parserOptions: {
+        project: true,
+        tsconfigRootDir: import.meta.dirname,
+      },
+    },
   },
   ...tseslint.configs.strictTypeChecked,
   prettierConfig,
