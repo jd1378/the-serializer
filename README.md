@@ -59,4 +59,4 @@ console.log(deserializedUser instanceof User); // true
 ## Credits
 
 uses [flatted](https://www.npmjs.com/package/flatted) under the hood to handle circular references.
-some ideas from `serialize-javascript`.
+some ideas from [serialize-javascript](https://www.npmjs.com/package/serialize-javascript).
