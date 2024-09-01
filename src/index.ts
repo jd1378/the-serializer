@@ -19,24 +19,27 @@ function getClassKey(item: any, classRevivers: ClassRecord): string {
 }
 
 function customReplacer(
-  this: Record<string, any> | undefined,
-  _key: string,
-  value: unknown,
+  boundThis: any,
+  classRevivers: ClassRecord | undefined,
+  key: string,
+  _value: unknown,
 ): unknown {
-  if (value === null) return null;
-  if (typeof value === 'undefined') {
+  if (_value === null) return null;
+  const value = boundThis[key];
+  const type = typeof value;
+  if (type === 'undefined') {
     return '{#$_u}';
   }
-  if (typeof value === 'number' && !Number.isNaN(value) && !Number.isFinite(value)) {
-    return `{#$_inf:${value > 0 ? '+' : '-'}}`;
+  if (type === 'number' && !Number.isNaN(value) && !Number.isFinite(value)) {
+    return `{#$_inf:${(value as number) > 0 ? '+' : '-'}}`;
   }
-  if (typeof value === 'bigint') {
-    return `{#$_B:${value.toString()}}`;
+  if (type === 'bigint') {
+    return `{#$_B:${(value as bigint).toString()}}`;
   }
-  if (typeof value === 'symbol') {
-    return `{#$_s:${value.toString().slice(7, -1)}}`;
+  if (type === 'symbol') {
+    return `{#$_s:${(value as symbol).toString().slice(7, -1)}}`;
   }
-  if (typeof value === 'object') {
+  if (type === 'object') {
     if (value instanceof Date) {
       return `{#$_D:${value.toISOString()}}`;
     }
@@ -52,8 +55,8 @@ function customReplacer(
     if (value instanceof RegExp) {
       return `{#$_R:${value.source}}${value.flags}`;
     }
-    if (this && typeof (value as Partial<JSONSerializable>)['toJSON'] === 'function') {
-      const classKey = getClassKey(value, this);
+    if (classRevivers && typeof (value as Partial<JSONSerializable>)['toJSON'] === 'function') {
+      const classKey = getClassKey(value, classRevivers);
       if (classKey) {
         return `{#$_C:${classKey}}${(value as JSONSerializable).toJSON()}`;
       }
@@ -127,7 +130,10 @@ function customReviver(this: ClassRecord | undefined, _key: string, value: any):
 }
 
 export function serialize(input: unknown, classes?: ClassRecord) {
-  return stringify(input, customReplacer.bind(classes));
+  const replacer = function boundCustomReplacer(this: any, _key: string, value: unknown) {
+    return customReplacer(this, classes, _key, value);
+  };
+  return stringify(input, replacer);
 }
 
 export function deserialize(input: string, classes?: ClassRecord) {

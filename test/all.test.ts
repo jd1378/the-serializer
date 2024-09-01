@@ -47,6 +47,9 @@ describe('serialize', () => {
     expect(serialize(new Date('2024-09-01T04:12:39.730Z'))).toBe(
       '["{#$_D:2024-09-01T04:12:39.730Z}"]',
     );
+    expect(serialize({a: new Date('2024-09-01T04:12:39.730Z')})).toBe(
+      '[{"a":"1"},"{#$_D:2024-09-01T04:12:39.730Z}"]',
+    );
   });
 
   it('can serialize Map', () => {
@@ -116,6 +119,28 @@ describe('serialize', () => {
       },
     };
     expect(serialize(obj)).toBe('[{"{#$_s:foo}":"1"},{"{#$_s:bar}":"2"},"baz"]');
+  });
+
+  it('can serialize complex objects', () => {
+    const obj = {
+      [Symbol.for('foo')]: {
+        a: new Map([['foo', 'bar']]),
+        b: new Set(['foo', 'bar']),
+        c: new RegExp('foo\\}\\{bar\\}', 'g'),
+        d: {
+          e: new URL('http://example.foo'),
+          f: new Date('2024-09-01T04:12:39.730Z'),
+          g: new Map([['foo', 'bar']]),
+          h: new Set(['foo', 'bar']),
+          i: {
+            j: undefined,
+          },
+        },
+      },
+    };
+    expect(serialize(obj)).toBe(
+      '[{"{#$_s:foo}":"1"},{"a":"2","b":"3","c":"4","d":"5"},"{#$_M:[[\\"1\\"],[\\"2\\",\\"3\\"],\\"foo\\",\\"bar\\"]}","{#$_S:[[\\"1\\",\\"2\\"],\\"foo\\",\\"bar\\"]}","{#$_R:foo\\\\}\\\\{bar\\\\}}g",{"e":"6","f":"7","g":"2","h":"3","i":"8"},"{#$_L:http%3A%2F%2Fexample.foo%2F}","{#$_D:2024-09-01T04:12:39.730Z}",{"j":"9"},"{#$_u}"]',
+    );
   });
 });
 
@@ -235,5 +260,29 @@ describe('deserialize', () => {
       },
     };
     expect(deserialize('[{"{#$_s:foo}":"1"},{"{#$_s:bar}":"2"},"baz"]')).toEqual(obj);
+  });
+
+  it('can deserialize complex objects', () => {
+    const obj = {
+      [Symbol.for('foo')]: {
+        a: new Map([['foo', 'bar']]),
+        b: new Set(['foo', 'bar']),
+        c: new RegExp('foo\\}\\{bar\\}', 'g'),
+        d: {
+          e: new URL('http://example.foo'),
+          f: new Date('2024-09-01T04:12:39.730Z'),
+          g: new Map([['foo', 'bar']]),
+          h: new Set(['foo', 'bar']),
+          i: {
+            j: undefined,
+          },
+        },
+      },
+    };
+    expect(
+      deserialize(
+        '[{"{#$_s:foo}":"1"},{"a":"2","b":"3","c":"4","d":"5"},"{#$_M:[[\\"1\\"],[\\"2\\",\\"3\\"],\\"foo\\",\\"bar\\"]}","{#$_S:[[\\"1\\",\\"2\\"],\\"foo\\",\\"bar\\"]}","{#$_R:foo\\\\}\\\\{bar\\\\}}g",{"e":"6","f":"7","g":"2","h":"3","i":"8"},"{#$_L:http%3A%2F%2Fexample.foo%2F}","{#$_D:2024-09-01T04:12:39.730Z}",{"j":"9"},"{#$_u}"]',
+      ),
+    ).toEqual(obj);
   });
 });
