@@ -74,6 +74,11 @@ describe('serialize', () => {
     expect(serialize(regex)).toBe('["{#$_R:foo\\\\}\\\\{bar\\\\}}g"]');
   });
 
+  it('can serialize Array', () => {
+    const array = [1, 2, 3];
+    expect(serialize(array)).toBe('[[1,2,3]]');
+  });
+
   it('can serialize class in a special way when provided', () => {
     class User {
       constructor(
@@ -192,6 +197,11 @@ describe('deserialize', () => {
   it('can deserialize Regex', () => {
     const regex = new RegExp('foo\\}\\{bar\\}', 'g');
     expect(deserialize('["{#$_R:foo\\\\}\\\\{bar\\\\}}g"]')).toEqual(regex);
+  });
+
+  it('can deserialize Array', () => {
+    const array = [1, 2, 3];
+    expect(deserialize('[[1,2,3]]')).toEqual(array);
   });
 
   it('can deserialize class in a special way when provided', () => {
