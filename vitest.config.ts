@@ -37,9 +37,8 @@ export default defineConfig({
     // hookTimeout: 1000000000,
     // teardownTimeout: 1000000000,
   },
-  // required for making `using` keyword work in vitest.
   esbuild: {
-    target: 'ES2022',
+    target: 'ESNEXT',
   },
   plugins: [tsconfigPaths()],
 });

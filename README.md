@@ -1,6 +1,18 @@
 # The serializer
 
-a certain specific JSON stringifier that supports `BigInt` and `Symbol` and `undefined`, and can possibly stringify your classes and revive them after parsing.
+a certain specific JSON stringifier that supports:
+
+- BigInt
+- Symbol
+- undefined
+- Infinity
+- Date
+- Map
+- Set
+- RegExp
+- URL
+
+and can possibly stringify your classes and revive them after parsing.
 
 ## Usage
 
@@ -9,7 +21,7 @@ pnpm install the-serializer
 ```
 
 ```ts
-import {serialize, deserialize, flattedParse, flattedStringify} from "the-serializer";
+import {serialize, deserialize} from "the-serializer";
 
 deserialize(serialize(BigInt(10))) === BigInt(10)
 
@@ -25,11 +37,11 @@ class User {
   ) {}
 
   toJSON() {
-    return flattedStringify([this.name, this.age]);
+    return serialize([this.name, this.age]);
   }
 
   static fromJSON(json: string) {
-    const [name, age] = flattedParse(json);
+    const [name, age] = deserialize(json);
     // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
     return new User(name, age);
   }
@@ -47,3 +59,4 @@ console.log(deserializedUser instanceof User); // true
 ## Credits
 
 uses [flatted](https://www.npmjs.com/package/flatted) under the hood to handle circular references.
+some ideas from `serialize-javascript`.
