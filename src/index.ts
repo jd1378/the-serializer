@@ -55,7 +55,7 @@ function customReplacer(
     if (this && typeof (value as Partial<JSONSerializable>)['toJSON'] === 'function') {
       const classKey = getClassKey(value, this);
       if (classKey) {
-        return `{#$_C:${classKey}}{#$_v:${(value as JSONSerializable).toJSON()}}`;
+        return `{#$_C:${classKey}}${(value as JSONSerializable).toJSON()}`;
       }
     }
     const symbols = Object.getOwnPropertySymbols(value);
@@ -88,7 +88,7 @@ function customReviver(this: ClassRecord | undefined, _key: string, value: any):
     if (value.indexOf('{#$_C:') === 0) {
       const classKey = value.slice(6, value.indexOf('}'));
       if (this) {
-        return this[classKey].fromJSON(value.slice(value.indexOf('}') + 7, -1));
+        return this[classKey].fromJSON(value.slice(value.indexOf('}') + 1));
       }
     }
     if (value.indexOf('{#$_D:') === 0) {

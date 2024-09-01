@@ -49,7 +49,7 @@ class User {
 
 const str = serialize(new User('john', 25), {User}); 
 
-console.log(str); // '[{"$$_c":"1","$$_v":"2"},"User","[[\\"1\\",25],\\"john\\"]"]'
+console.log(str); // '["{#$_C:User}[[\"1\",25],\"john\"]"]'
 
 const deserializedUser = deserialize(str, {User});
 

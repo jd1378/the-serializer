@@ -90,7 +90,7 @@ describe('serialize', () => {
       }
     }
     expect(serialize(new User('john', 25), {User})).toBe(
-      '["{#$_C:User}{#$_v:[[\\"1\\",25],\\"john\\"]}"]',
+      '["{#$_C:User}[[\\"1\\",25],\\"john\\"]"]',
     );
   });
 
@@ -209,7 +209,7 @@ describe('deserialize', () => {
         return new User(name, age);
       }
     }
-    const deserializedUser: User = deserialize('["{#$_C:User}{#$_v:[[\\"1\\",25],\\"john\\"]}"]', {
+    const deserializedUser: User = deserialize('["{#$_C:User}[[\\"1\\",25],\\"john\\"]"]', {
       User,
     });
 
